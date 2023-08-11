@@ -1,0 +1,49 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    /* viewport units: vh(viewport height) vw(viewport width) */
+    height: 100vh;
+    margin: 0;
+    font-family: 'DM Serif Display', serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+header {
+    font-size: 4vmin;
+    color: mediumvioletred;
+    letter-spacing: .5vmin;
+}
+
+h1 {
+    color: darkgoldenrod;
+    font-size: 3vmin;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(8, 8vmin);
+    grid-template-rows: repeat(8, 8vmin);
+}
+
+#board>div {
+    border: 0.05vmin solid black;
+}
+
+#playAgn, #reset {
+    margin-top: 4vmin;
+    padding: 2vmin;
+    font-size: 2vmin;
+    border-radius: 4vmin;
+    border: 0.1vmin solid red;
+    color: black;
+}
+
+button:hover {
+    color: white;
+    background-color: red;
+}

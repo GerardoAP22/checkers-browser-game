@@ -19,7 +19,6 @@ const playAgainBtn = document.getElementById('playAgn');
 const resetBtn = document.getElementById('reset');
 const messageEl = document.querySelector('h1');
 const gridEls = document.querySelectorAll('#board > div');
-console.log(gridEls);
   
 /*----- event listeners -----*/
 document.getElementById('board').addEventListener('click', handleMove);
@@ -104,26 +103,20 @@ function handleMove(evt) {
     } else {
         const startCol = selectedPiece[0];
         const startRow = selectedPiece[1];
-        if(isValidMove(startCol, startRow, colIdx, rowIdx, currentPlayer)) {
+
+        // Allows players to reselct a piece if they change thier mind
+        if (colIdx === startCol && rowIdx === startRow) {
+            selectedPiece = null;
+        } else if(isValidMove(startCol, startRow, colIdx, rowIdx, currentPlayer)) {
             board[colIdx][rowIdx] = currentPlayer;
             board[startCol][startRow] = 0;
             selectedPiece = null;
+            currentPlayer *= -1;
             render();
         } else{
             return;
         }
     }
-    //   Check if the selected move is valid for the current player's piece.
-    //     Need to check wether the piece is class king or class knight
-    //   If valid:
-    //       Update the board array with the new piece positions.
-    //       Check for captured opponent pieces and remove them from the board array.
-
-    //       Switch the current player.
-    //       check to see if there is a winner 
-    //       Render the updated game board.
-    //   If not valid:
-    //       return so the player could choose another position
 }
 
 function isValidMove(startCol, startRow, endCol, endRow, currentPlayer) {
@@ -134,13 +127,17 @@ function isValidMove(startCol, startRow, endCol, endRow, currentPlayer) {
 
     if(board[endCol][endRow] !== 0) return false;
 
-    // checks if its diagonal move 
-    if((endRow - startRow) !== (endCol - startCol)) return false;
+    const colDiff = Math.abs(endCol - startCol);
+    const rowDiff = Math.abs(endRow - startRow);
 
-    if ((currentPlayer === 1 && rowDiff < 0) || (currentPlayer === -1 && rowDiff > 0)) {
+    // checks if its diagonal move 
+    if(rowDiff > 1 || colDiff > 1 && (rowDiff !== colDiff)) return false;
+
+    //would determine the direction of red or black pieces are legal
+    if ((currentPlayer === 1 && (endRow - startRow) < 0) || (currentPlayer === -1 && (endRow - startRow) > 0)) {
         return false;
     }
-    // Additional checks specific to capturing and kinging might be needed
+    // Additional checks specific to capturing and kinging needed
     return true;
 }
 

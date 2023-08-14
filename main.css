@@ -53,3 +53,7 @@ button:hover {
     color: white;
     background-color: red;
 }
+
+.selected {
+    border: 2px solid beige;
+}

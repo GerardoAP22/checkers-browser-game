@@ -18,7 +18,7 @@ let selectedPiece;
 const playAgainBtn = document.getElementById('playAgn');
 const resetBtn = document.getElementById('reset');
 const messageEl = document.querySelector('h1');
-const gridEls = document.querySelectorAll('#board > div');
+// const gridEls = document.querySelectorAll('#board > div');
   
 /*----- event listeners -----*/
 document.getElementById('board').addEventListener('click', handleMove);
@@ -31,15 +31,16 @@ init()
 function init(){
 // // Create a 2D array to represent the game board with the initial pieces on each side
     board = [
-       [1, 0, 1, 0, 0, 0, -1, 0],
-       [0, 1, 0, 0, 0, -1, 0, -1],
-       [1, 0, 1, 0, 0, 0, -1, 0],
-       [0, 1, 0, 0, 0, -1, 0, -1],
-       [1, 0, 1, 0, 0, 0, -1, 0],
-       [0, 1, 0, 0, 0, -1, 0, -1],
-       [1, 0, 1, 0, 0, 0, -1, ],
-       [0, 1, 0, 0, 0, -1, 0, -1]
+        [1, 0, 1, 0, 0, 0, -1, 0],
+        [0, 1, 0, 0, 0, -1, 0, -1],
+        [1, 0, 1, 0, 0, 0, -1, 0],
+        [0, 1, 0, 0, 0, -1, 0, -1],
+        [1, 0, 1, 0, 0, 0, -1, 0],
+        [0, 1, 0, 0, 0, -1, 0, -1],
+        [1, 0, 1, 0, 0, 0, -1,],
+        [0, 1, 0, 0, 0, -1, 0, -1]
     ];
+
     currentPlayer = 1; //player 1(black) starts
     totalBlackPieces = 12;
     totalRedPieces = 12;
@@ -112,6 +113,7 @@ function handleMove(evt) {
             board[startCol][startRow] = 0;
             selectedPiece = null;
             currentPlayer *= -1;
+            checkWinner();
             render();
         } else{
             return;
@@ -120,27 +122,59 @@ function handleMove(evt) {
 }
 
 function isValidMove(startCol, startRow, endCol, endRow, currentPlayer) {
-    // Need to check bounds first
+    // Need to check if it is in bounds
     if (endRow < 0 || endRow >= board.length || endCol < 0 || endCol >= board[0].length){
         return false;
     }
 
+    // Check if it is empty
     if(board[endCol][endRow] !== 0) return false;
 
     const colDiff = Math.abs(endCol - startCol);
     const rowDiff = Math.abs(endRow - startRow);
 
-    // checks if its diagonal move 
-    if(rowDiff > 1 || colDiff > 1 && (rowDiff !== colDiff)) return false;
+    // prevents horizontal & vertical movement
+    if ((colDiff > 0 && endRow === startRow) || (rowDiff > 0 && endCol === startCol)) return false;
 
-    //would determine the direction of red or black pieces are legal
-    if ((currentPlayer === 1 && (endRow - startRow) < 0) || (currentPlayer === -1 && (endRow - startRow) > 0)) {
+    // Check if its a valid diagonal move
+    if (rowDiff !== colDiff) return false;
+
+    // if the rowDiff & colDiff is === 2 check if there is an enemey in between
+    if(rowDiff === 2 && colDiff === 2) {
+        const enemyCol = (startCol + endCol)/ 2;
+        const enemyRow = (startRow + endRow)/ 2;
+        if (board[enemyCol][enemyRow] === -currentPlayer){
+            board[enemyCol][enemyRow] = 0;
+            if (-currentPlayer === 1){
+                --totalBlackPieces;
+            } else {
+                --totalRedPieces;
+            }
+            return true;
+        } else {
         return false;
+        }
+    } 
+    
+    // red will be -1 as it is moving downwards, black direction will be 1 as we are moving up 
+    const direction = currentPlayer === 1 ? 1 : -1;
+
+    // If it is not capturing a piece, we need to check the single diagonal move
+    if (rowDiff === 1 && colDiff === 1 && (endRow - startRow === direction)) {
+        return true;
     }
-    // Additional checks specific to capturing and kinging needed
-    return true;
+
+    return false;
 }
 
-  
-  
+function checkWinner() {
+    if(totalRedPieces === 0){
+        winner = 1;
+    } else if (totalBlackPieces === 0) {
+        winner = -1;
+    } else {
+        winner = null;
+    }
+
+}
   

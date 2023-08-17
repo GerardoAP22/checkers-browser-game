@@ -113,20 +113,37 @@ function handleSurrender() {
 
 // Function to handle player moves
 function handleMove(evt) {
+    let selectedPieceDiv;
+    let selectedPieceImg;
+    if (evt.target.id === 'board') return;
     //Source: Chat GPT destructuring assignment
     const [colIdx, rowIdx] = getCellIndexes(evt.target);
     previousTotalBlackPieces = totalBlackPieces;
     previousTotalRedPieces = totalRedPieces;
 
+    selectedPieceDiv = document.getElementById(`c${colIdx}r${rowIdx}`);
+    selectedPieceImg = selectedPieceDiv.querySelector('img');
+
     if (!selectedPiece) {
         selectedPiece = handlePieceSelection(colIdx, rowIdx, currentPlayer);
+        //adds yellow border to checker piece
+        if(selectedPiece === undefined) return; // Handles case where they click the div border
+        if (selectedPieceImg) {
+            selectedPieceImg.style.border = '0.15vmin solid yellow';
+        }
     } else {
         const [startCol, startRow] = selectedPiece;
 
         // Allows players to reselct a piece if they change thier mind
         if (colIdx === startCol && rowIdx === startRow) {
+            if (selectedPieceImg && selectedPieceImg.style) { // Check if selectedPieceImg exists and has a style property
+                selectedPieceImg.style.border = '0.15vmin solid white';
+            }
             selectedPiece = null;
         } else if (isValidMoveAndExecute(startCol, startRow, colIdx, rowIdx, currentPlayer)) {
+            if (selectedPieceImg) {
+                selectedPieceImg.style.border = '0.15vmin solid white';
+            }
             selectedPiece = null;
             if ((currentPlayer === -1 && totalBlackPieces !== previousTotalBlackPieces) || (currentPlayer === 1 && totalRedPieces !== previousTotalRedPieces)) {
                 currentPlayer = currentPlayer;

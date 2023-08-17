@@ -61,6 +61,7 @@ h1 {
 #scoreboard {
   /* Styling for the scoreboard */
   background-color: #ddcaaa;
+  font-family: "DM Serif Display", serif;
   padding: 20px;
   margin-left: 20px;
   border: 0.5vmin solid #90645a;

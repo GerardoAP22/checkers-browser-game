@@ -1,11 +1,16 @@
 /*----- constants -----*/
-// Will use colors while first building the game and then transition to using images
 const COLORS = {
     '0': null,
     '1': 'black',
     '-1': 'red',
-    '2': 'gray',
-    '-2': 'orange'
+}
+
+const IMAGES = {
+    '0': null,
+    '1': "./assets/blackCheckerPiece.png",
+    '-1': "./assets/redCheckerPiece.png",
+    '2': "./assets/blackKingCheckerPiece.png",
+    '-2': "./assets/redKingCheckerPiece.png",
 }
 
 /*----- state variables -----*/
@@ -20,6 +25,7 @@ let selectedPiece;
 const playAgainBtn = document.getElementById('playAgn');
 const resetBtn = document.getElementById('reset');
 const messageEl = document.querySelector('h1');
+const scoreboardEl = document.getElementById('scoreboard');
 const gridEls = [...document.querySelectorAll('#board > div')];
 
 /*----- event listeners -----*/
@@ -44,8 +50,8 @@ function init() {
      ];
 
     currentPlayer = 1; //player 1(black) starts
-    totalBlackPieces = 2; //12
-    totalRedPieces = 2; //12
+    totalBlackPieces = 12;
+    totalRedPieces = 12; 
     selectedPiece = null;
     winner = null;
     render();
@@ -54,6 +60,7 @@ function init() {
 function render() {
     renderBoard();
     renderMessage();
+    renderScoreboard();
     renderControl();
 }
 
@@ -63,7 +70,13 @@ function renderBoard() {
         colArr.forEach(function (cellVal, rowIdx) {
             const cellId = `c${colIdx}r${rowIdx}`;
             const cellEl = document.getElementById(cellId);
-            cellEl.style.backgroundColor = COLORS[cellVal];
+            cellEl.innerHTML = ''; // Clear the cell's content
+
+            if (IMAGES[cellVal]) {
+                const imgEl = document.createElement('img');
+                imgEl.src = IMAGES[cellVal];
+                cellEl.appendChild(imgEl);
+            }
 
             // Will highlight the selected piece
             if (selectedPiece && colIdx === selectedPiece[0] && rowIdx === selectedPiece[1]) {
@@ -83,6 +96,14 @@ function renderMessage() {
     }
 }
 
+function renderScoreboard() {
+    scoreboardEl.innerHTML = `<strong>Scoreboard:<br><br>
+    <span style="color: ${COLORS[1]}"> Black Pieces left:</span> ${totalBlackPieces}
+    <br><br>
+    <span style="color: ${COLORS[-1]}"> Red Pieces left:</span> ${totalRedPieces}
+    </strong>`;
+}
+
 function renderControl() {
     playAgainBtn.style.visibility = winner ? 'visible' : 'hidden';
     resetBtn.style.visibility = !winner ? 'visible' : 'hidden';
@@ -94,9 +115,16 @@ function handleSurrender() {
         render()
     }
 }
+
 // Function to handle player moves
 function handleMove(evt) {
-    const cellId = evt.target.id;
+    const target = evt.target;
+    let cellId;
+    if (target.tagName === 'IMG'){
+        cellId = target.parentNode.id;
+    } else {
+        cellId = target.id;
+    }
     const colIdx = parseInt(cellId.charAt(1));
     const rowIdx = parseInt(cellId.charAt(3));
 
@@ -132,6 +160,7 @@ function handleMove(evt) {
     }
 }
 
+
 function isValidMove(startCol, startRow, endCol, endRow, currentPlayer) {
     // Need to check if it is in bounds
     if (endRow < 0 || endRow >= board.length || endCol < 0 || endCol >= board[0].length) {
@@ -161,16 +190,20 @@ function isValidMove(startCol, startRow, endCol, endRow, currentPlayer) {
         if (rowDiff === 2 && colDiff === 2) {
             const enemyCol = (startCol + endCol) / 2;
             const enemyRow = (startRow + endRow) / 2;
-            if (board[enemyCol][enemyRow] === -currentPlayer || board[enemyCol][endRow] === -currentPlayer * 2) {
-                board[enemyCol][enemyRow] = 0;
-                if (-currentPlayer === 1) {
-                    --totalBlackPieces;
+
+            // Check if enemyCol and enemyRow are within valid bounds
+            if (enemyCol >= 0 && enemyCol < board[0].length && enemyRow >= 0 && enemyRow < board.length) {
+                if (board[enemyCol][enemyRow] === -currentPlayer || board[enemyCol][enemyRow] === -currentPlayer * 2) {
+                    board[enemyCol][enemyRow] = 0;
+                    if (-currentPlayer === 1) {
+                        --totalBlackPieces;
+                    } else {
+                        --totalRedPieces;
+                    }
+                    return true;
                 } else {
-                    --totalRedPieces;
+                    return false;
                 }
-                return true;
-            } else {
-                return false;
             }
         }
     }
@@ -189,22 +222,27 @@ function isValidMove(startCol, startRow, endCol, endRow, currentPlayer) {
         if (rowDiff === 2 && colDiff === 2 && (endRow - startRow === direction * 2)) {
             const enemyCol = (startCol + endCol) / 2;
             const enemyRow = (startRow + endRow) / 2;
-            if (board[enemyCol][enemyRow] !== currentPlayer && board[enemyCol][enemyRow] !== currentPlayer * 2) {
-                board[enemyCol][enemyRow] = 0;
-                if (-currentPlayer === 1) {
-                    --totalBlackPieces;
+
+            // Check if enemyCol and enemyRow are within valid bounds
+            if (enemyCol >= 0 && enemyCol < board[0].length && enemyRow >= 0 && enemyRow < board.length) {
+                if (board[enemyCol][enemyRow] !== currentPlayer && board[enemyCol][enemyRow] !== currentPlayer * 2) {
+                    board[enemyCol][enemyRow] = 0;
+                    if (-currentPlayer === 1) {
+                        --totalBlackPieces;
+                    } else {
+                        --totalRedPieces;
+                    }
+                    return true;
                 } else {
-                    --totalRedPieces;
+                    return false;
                 }
-                return true;
-            } else {
-                return false;
             }
         }
     }
 
     return false;
 }
+
 
 function checkWinner() {
     if (totalRedPieces === 0) {

@@ -11,6 +11,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: beige;
 }
 
 header {
@@ -20,18 +21,38 @@ header {
 }
 
 h1 {
-    color: darkgoldenrod;
+    color: #90645a;
     font-size: 3vmin;
+}
+
+#game-container {
+    display: flex;
+    align-items: flex-start; /* Adjust this to your layout preference */
 }
 
 #board {
     display: grid;
     grid-template-columns: repeat(8, 8vmin);
     grid-template-rows: repeat(8, 8vmin);
+    border: 0.2vmin solid black;
 }
 
 #board>div {
     border: 0.05vmin solid black;
+}
+
+#board>div>img {
+    max-width: 98%;
+    max-height: 98%;
+    border: 50%;
+}
+
+#scoreboard {
+    /* Styling for the scoreboard */
+    background-color: #ddcaaa;
+    padding: 20px;
+    margin-left: 20px;
+    border: 0.5vmin solid #90645a;
 }
 
 #buttons {
@@ -55,5 +76,5 @@ button:hover {
 }
 
 .selected {
-    border: 2px solid beige;
+    border: 1vmin solid yellow;
 }

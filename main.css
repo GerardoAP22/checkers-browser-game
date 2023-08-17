@@ -44,7 +44,8 @@ h1 {
 #board>div>img {
     max-width: 98%;
     max-height: 98%;
-    border: 50%;
+    border-radius: 50%;
+    border: 0.15vmin solid white;
 }
 
 .dark {
@@ -85,6 +86,6 @@ button:hover {
     background-color: red;
 }
 
-.selected {
-    border: 1vmin solid yellow;
+#board>div>img.selected {
+    border: .3vmin solid yellow;
 }

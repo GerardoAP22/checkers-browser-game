@@ -19,6 +19,8 @@ let currentPlayer;
 let winner;
 let totalBlackPieces;
 let totalRedPieces;
+let previousTotalBlackPieces;
+let previousTotalRedPieces;
 let selectedPiece;
 
 /*----- cached elements  -----*/
@@ -78,11 +80,15 @@ function renderBoard() {
                 cellEl.appendChild(imgEl);
             }
 
+            const imgEl = cellEl.querySelector('img');
             // Will highlight the selected piece
-            if (selectedPiece && colIdx === selectedPiece[0] && rowIdx === selectedPiece[1]) {
-                cellEl.classList.add('selected');
-            } else {
-                cellEl.classList.remove('selected');
+            if(imgEl){
+                if (selectedPiece && colIdx === selectedPiece[0] && rowIdx === selectedPiece[1]) {
+                    console.log(imgEl.classList.contains('selected'));
+                    imgEl.classList.add('selected');
+                } else {
+                    imgEl.classList.remove('selected');
+                }
             }
         })
     })
@@ -124,6 +130,8 @@ function handleMove(evt) {
     }
     const colIdx = parseInt(cellId.charAt(1));
     const rowIdx = parseInt(cellId.charAt(3));
+    previousTotalBlackPieces = totalBlackPieces;
+    previousTotalRedPieces = totalRedPieces;
 
     if (!selectedPiece) {
         const cellVal = board[colIdx][rowIdx];
@@ -148,7 +156,11 @@ function handleMove(evt) {
             }
             board[startCol][startRow] = 0;
             selectedPiece = null;
-            currentPlayer *= -1;
+            if ((currentPlayer === -1 && totalBlackPieces !== previousTotalBlackPieces) || (currentPlayer === 1 && totalRedPieces !== previousTotalRedPieces)){
+                currentPlayer = currentPlayer;
+            } else {
+                currentPlayer *= -1;
+            }
             checkWinner();
             render();
         } else {
@@ -160,9 +172,7 @@ function handleMove(evt) {
 
 function isValidMove(startCol, startRow, endCol, endRow, currentPlayer) {
     // Need to check if it is in bounds
-    if (endRow < 0 || endRow >= board.length || endCol < 0 || endCol >= board[0].length) {
-        return false;
-    }
+    if(!isInBounds(endCol, endRow)) return false;
 
     // Check if it is empty
     if (board[endCol][endRow] !== 0) return false;
@@ -171,17 +181,12 @@ function isValidMove(startCol, startRow, endCol, endRow, currentPlayer) {
     const rowDiff = Math.abs(endRow - startRow);
 
     // prevents horizontal & vertical movement
-    if ((colDiff > 0 && endRow === startRow) || (rowDiff > 0 && endCol === startCol)) return false;
-
-    // Check if its a valid diagonal move
-    if (rowDiff !== colDiff) return false;
+    if(!isValidDirection(colDiff, rowDiff) && !isValidDiagonal(colDiff, rowDiff)) return false;
 
     // King Pieces
-    if (board[startCol][startRow] === 2 || board[startCol][startRow] === -2) {
+    if (isKingPiece(startCol, startRow)) {
         // allow king pieces to move either diagonal direction
-        if (rowDiff === 1 && colDiff === 1) {
-            return true;
-        }
+        if (isKingDiagonalMove(colDiff, rowDiff)) return true;
 
         // Check if there is a piece in between and if it is an enemy, allow 2 space move
         if (rowDiff === 2 && colDiff === 2) {
@@ -253,4 +258,25 @@ function makeKing(colIdx, rowIdx, currentPlayer) {
         board[colIdx][rowIdx] = -2;
     }
     return;
+}
+
+function isInBounds(col, row) {
+    return row >= 0 && row < board.length && col >= 0 && col < board[0].length;
+}
+
+function isValidDirection(colDiff, rowDiff) {
+    return (colDiff > 0 && rowDiff === 0) || (rowDiff > 0 && colDiff === 0);
+}
+
+function isValidDiagonal(colDiff, rowDiff) {
+    return colDiff === rowDiff;
+}
+
+function isKingPiece(col, row) {
+    const piece = board[col][row];
+    return piece === 2 || piece === -2;
+}
+
+function isKingDiagonalMove(colDiff, rowDiff) {
+    return rowDiff === 1 && colDiff === 1;
 }

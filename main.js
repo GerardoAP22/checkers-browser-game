@@ -89,11 +89,9 @@ function renderBoard() {
 }
 
 function renderMessage() {
-    if (winner) {
-        messageEl.innerHTML = `<span style="color: ${COLORS[winner]}">${COLORS[winner].toUpperCase()}</span> Wins`
-    } else {
-        messageEl.innerHTML = `<span style="color: ${COLORS[currentPlayer]}">${COLORS[currentPlayer].toUpperCase()}</span>'s Turn`
-    }
+    messageEl.innerHTML = winner
+        ? `<span style="color: ${COLORS[winner]}">${COLORS[winner].toUpperCase()}</span> Wins`
+        : `<span style="color: ${COLORS[currentPlayer]}">${COLORS[currentPlayer].toUpperCase()}</span>'s Turn`;
 }
 
 function renderScoreboard() {
@@ -118,12 +116,11 @@ function handleSurrender() {
 
 // Function to handle player moves
 function handleMove(evt) {
-    const target = evt.target;
     let cellId;
-    if (target.tagName === 'IMG'){
-        cellId = target.parentNode.id;
+    if (evt.target.tagName === 'IMG'){
+        cellId = evt.target.parentNode.id;
     } else {
-        cellId = target.id;
+        cellId = evt.target.id;
     }
     const colIdx = parseInt(cellId.charAt(1));
     const rowIdx = parseInt(cellId.charAt(3));
@@ -245,14 +242,7 @@ function isValidMove(startCol, startRow, endCol, endRow, currentPlayer) {
 
 
 function checkWinner() {
-    if (totalRedPieces === 0) {
-        winner = 1;
-    } else if (totalBlackPieces === 0) {
-        winner = -1;
-    } else {
-        winner = null;
-    }
-
+    winner = totalRedPieces === 0 ? 1 : totalBlackPieces === 0 ? -1 : null;
 }
 
 function makeKing(colIdx, rowIdx, currentPlayer) {

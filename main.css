@@ -1,91 +1,92 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    /* viewport units: vh(viewport height) vw(viewport width) */
-    height: 100vh;
-    margin: 0;
-    font-family: 'DM Serif Display', serif;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: lightgray;
+  /* viewport units: vh(viewport height) vw(viewport width) */
+  height: 100vh;
+  margin: 0;
+  font-family: "DM Serif Display", serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(172, 190, 165, 0.678);
 }
 
 header {
-    font-size: 4vmin;
-    color: mediumvioletred;
-    letter-spacing: .5vmin;
+  font-size: 4vmin;
+  color: mediumvioletred;
+  letter-spacing: 0.5vmin;
 }
 
 h1 {
-    color: #90645a;
-    font-size: 3vmin;
+  color: #90645a;
+  font-size: 3vmin;
 }
 
 #game-container {
-    display: flex;
-    align-items: flex-start; /* Adjust this to your layout preference */
+  display: flex;
+  align-items: flex-start; /* Adjust this to your layout preference */
 }
 
 #board {
-    display: grid;
-    grid-template-columns: repeat(8, 8vmin);
-    grid-template-rows: repeat(8, 8vmin);
-    border: 0.2vmin solid black;
+  display: grid;
+  grid-template-columns: repeat(8, 8vmin);
+  grid-template-rows: repeat(8, 8vmin);
+  border: 0.2vmin solid black;
 }
 
-#board>div {
-    border: 0.05vmin solid black;
+#board > div {
+  border: 0.05vmin solid black;
 }
 
-#board>div>img {
-    max-width: 98%;
-    max-height: 98%;
-    border-radius: 50%;
-    border: 0.15vmin solid white;
+#board > div > img {
+  max-width: 98%;
+  max-height: 98%;
+  border-radius: 50%;
+  border: 0.15vmin solid white;
 }
 
 .dark {
-    background-image: url(./assets/darkOak.png);
-    background-size: cover;
+  background-image: url(./assets/darkOak.png);
+  background-size: cover;
 }
 
 .light {
-    background-image: url(./assets/lightWood.png);
-    background-size: cover;
+  background-image: url(./assets/lightWood.png);
+  background-size: cover;
 }
 
 #scoreboard {
-    /* Styling for the scoreboard */
-    background-color: #ddcaaa;
-    padding: 20px;
-    margin-left: 20px;
-    border: 0.5vmin solid #90645a;
+  /* Styling for the scoreboard */
+  background-color: #ddcaaa;
+  padding: 20px;
+  margin-left: 20px;
+  border: 0.5vmin solid #90645a;
 }
 
 #buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-#playAgn, #reset {
-    margin-top: 4vmin;
-    padding: 2vmin;
-    font-size: 2vmin;
-    border-radius: 4vmin;
-    border: 0.1vmin solid red;
-    color: black;
+#playAgn,
+#reset {
+  margin-top: 4vmin;
+  padding: 2vmin;
+  font-size: 2vmin;
+  border-radius: 4vmin;
+  border: 0.1vmin solid red;
+  color: black;
 }
 
 button:hover {
-    color: white;
-    background-color: red;
+  color: white;
+  background-color: red;
 }
 
-#board>div>img.selected {
-    border: .3vmin solid yellow;
+#board > div > img.selected {
+  border: 0.3vmin solid yellow;
 }

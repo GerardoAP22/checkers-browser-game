@@ -310,7 +310,7 @@ function isSingleDiagonalMove(startRow, endRow, colDiff, rowDiff, direction) {
 }
 
 function isRegularCaptureMove(enemyCol, enemyRow, currentPlayer) {
-    if (board[enemyCol][enemyRow] !== currentPlayer && board[enemyCol][enemyRow] !== currentPlayer * 2) {
+    if (board[enemyCol][enemyRow] !== currentPlayer && board[enemyCol][enemyRow] !== currentPlayer * 2 && board[enemyCol][enemyRow] !== 0) {
         board[enemyCol][enemyRow] = 0;
         if (-currentPlayer === 1) {
             --totalBlackPieces;

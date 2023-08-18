@@ -15,6 +15,7 @@ My game is checkers. Two players locally play on a 8x8 grid. Players move thier 
 # Getting Started
 
 - [GitHub Pages](https://gerardoap22.github.io/checkers-browser-game/)
+- [Netlify Link](https://gerardoap-checkers-game.netlify.app/)
 
 # Game Instructions
 - Player chooses what piece they want to move. That piece will have a yellow border color.

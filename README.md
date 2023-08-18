@@ -14,7 +14,16 @@ My game is checkers. Two players locally play on a 8x8 grid. Players move thier 
 
 # Getting Started
 
-- 
+- [GitHub Pages](https://gerardoap22.github.io/checkers-browser-game/)
+
+# Game Instructions
+- Player chooses what piece they want to move. That piece will have a yellow border color.
+- Click on the diagonal that they wish to move to.
+- If the player wants to reselect the piece they want to move, click the inital piece again to remove the yellow border color. Click the new piece.
+- A player can only capture a piece if there is an avaialble space after the enemy piece.
+- When a player's checker piece gets to the end of the board (respectively), the piece will become a king piece.
+- King pieces are allowed to go backkwards as well as forward.
+- Game will end when a player loses all thier pieces or a player clicks the surrender button.
 
 # Next Steps
 

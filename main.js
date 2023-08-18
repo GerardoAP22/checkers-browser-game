@@ -28,6 +28,9 @@ const playAgainBtn = document.getElementById("playAgn");
 const resetBtn = document.getElementById("reset");
 const messageEl = document.querySelector("h1");
 const scoreboardEl = document.getElementById("scoreboard");
+const kingUpgradeSound = document.getElementById('kingUpgrade');
+const takePieceSound = document.getElementById('takePiece');
+const movePieceSound = document.getElementById('movePiece');
 
 /*----- event listeners -----*/
 document.getElementById("board").addEventListener("click", handleMove);
@@ -245,6 +248,7 @@ function isValidMoveAndExecute(startCol, startRow, colIdx, rowIdx, currentPlayer
     if (isValidMove(startCol, startRow, colIdx, rowIdx, currentPlayer)) {
         if (rowIdx === 0 || rowIdx === 7) {
             makeKing(colIdx, rowIdx, currentPlayer);
+            playKingUpgradeSound();
         } else {
             // Check if the piece being moved is a king, if yes then maintain its king value
             if (board[startCol][startRow] === 2 || board[startCol][startRow] === -2) {
@@ -254,6 +258,7 @@ function isValidMoveAndExecute(startCol, startRow, colIdx, rowIdx, currentPlayer
             }
         }
         board[startCol][startRow] = 0;
+        playMovePieceSound();
         return true;
     }
     return false;
@@ -288,6 +293,7 @@ function isKingCaptureMove(enemyCol, enemyRow, currentPlayer) {
         } else {
             --totalRedPieces;
         }
+        playTakePieceSound();
         return true;
     } else {
         return false;
@@ -311,8 +317,28 @@ function isRegularCaptureMove(enemyCol, enemyRow, currentPlayer) {
         } else {
             --totalRedPieces;
         }
+        playTakePieceSound();
         return true;
     } else {
         return false;
     }
+}
+
+// Sound functions structure source: Felix Carela
+function playKingUpgradeSound() {
+    movePieceSound.pause();
+    movePieceSound.currentTime = 0;
+    kingUpgradeSound.play();
+}
+
+function playTakePieceSound() {
+    movePieceSound.pause();
+    movePieceSound.currentTime = 0;
+    takePieceSound.play();
+}
+
+function playMovePieceSound() {
+    movePieceSound.pause();
+    movePieceSound.currentTime = 0;
+    movePieceSound.play();
 }
